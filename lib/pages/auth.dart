@@ -5,7 +5,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 typedef OAuthSignIn = void Function();
 
-
 class ScaffoldSnackbar {
   ScaffoldSnackbar(this._context);
 
@@ -24,13 +23,10 @@ class ScaffoldSnackbar {
   }
 }
 
-enum AuthMode { login}
+enum AuthMode { login }
 
 extension on AuthMode {
-  String get label =>
-      this == AuthMode.login
-          ? 'Sign in'
-          : 'Register';
+  String get label => this == AuthMode.login ? 'Sign in' : 'Register';
 }
 
 /// Entrypoint example for various sign-in flows with Firebase.
@@ -43,7 +39,6 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String error = '';
   String verificationId = '';
@@ -63,7 +58,6 @@ class _AuthGateState extends State<AuthGate> {
   @override
   void initState() {
     super.initState();
-
 
     authButtons = {
       Buttons.Microsoft:
@@ -116,33 +110,29 @@ class _AuthGateState extends State<AuthGate> {
                             ),
                           ),
 
-                          ...authButtons.keys
-                              .map(
-                                (button) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5,
-                                  ),
-                                  child: AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 200),
-                                    child:
-                                        isLoading
-                                            ? Container(
-                                              color: Colors.grey[200],
-                                              height: 50,
-                                              width: double.infinity,
-                                            )
-                                            : SizedBox(
-                                              width: double.infinity,
-                                              height: 50,
-                                              child: SignInButton(
-                                                button,
-                                                onPressed: authButtons[button]!,
-                                              ),
-                                            ),
-                                  ),
-                                ),
-                              )
-                              ,
+                          ...authButtons.keys.map(
+                            (button) => Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                child:
+                                    isLoading
+                                        ? Container(
+                                          color: Colors.grey[200],
+                                          height: 50,
+                                          width: double.infinity,
+                                        )
+                                        : SizedBox(
+                                          width: double.infinity,
+                                          height: 50,
+                                          child: SignInButton(
+                                            button,
+                                            onPressed: authButtons[button]!,
+                                          ),
+                                        ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -181,10 +171,14 @@ class _AuthGateState extends State<AuthGate> {
   Future<void> _signInWithMicrosoft() async {
     final microsoftProvider = MicrosoftAuthProvider();
 
-    if (kIsWeb) {
-      await FirebaseAuth.instance.signInWithPopup(microsoftProvider);
-    } else {
-      await FirebaseAuth.instance.signInWithProvider(microsoftProvider);
-    }
+    microsoftProvider.addScope("Files.Read");
+    microsoftProvider.addScope("Files.Read.All");
+    microsoftProvider.addScope("offline_access");
+    microsoftProvider.addScope("User.Read");
+    microsoftProvider.addScope("User.Read.All");
+
+    var userCredential =
+        await FirebaseAuth.instance.signInWithProvider(microsoftProvider);
+    print(userCredential.credential?.accessToken);
   }
 }

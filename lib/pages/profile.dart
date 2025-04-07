@@ -1,6 +1,3 @@
-// Copyright 2022, the Chromium project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
 
 import 'dart:developer';
 
@@ -9,13 +6,10 @@ import 'package:flutter/material.dart';
 
 import 'auth.dart';
 
-/// Displayed as a profile image if the user doesn't have one.
 const placeholderImage =
     'https://upload.wikimedia.org/wikipedia/commons/c/cd/Portrait_Placeholder_Square.png';
 
-/// Profile page shows after sign in or registration.
 class ProfilePage extends StatefulWidget {
-  // ignore: public_member_api_docs
   const ProfilePage({super.key});
 
   @override
@@ -36,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     user = FirebaseAuth.instance.currentUser!;
+    print("User is present or not:: $user");
     controller = TextEditingController(text: user.displayName);
 
     controller.addListener(_onNameChanged);
@@ -170,47 +165,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () {
-                          user.sendEmailVerification();
-                        },
-                        child: const Text('Verify Email'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          final a = await user.multiFactor.getEnrolledFactors();
-                          print(a);
-                        },
-                        child: const Text('Get enrolled factors'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          if (AuthGate.appleAuthorizationCode != null) {
-                            // The `authorizationCode` is on the user credential.
-                            // e.g. final authorizationCode = userCredential.additionalUserInfo?.authorizationCode;
-                            await FirebaseAuth.instance
-                                .revokeTokenWithAuthorizationCode(
-                                  AuthGate.appleAuthorizationCode!,
-                                );
-                            // You may wish to delete the user at this point
-                            AuthGate.appleAuthorizationCode = null;
-                          } else {
-                            print(
-                              'Apple `authorizationCode` is null, cannot revoke token.',
-                            );
-                          }
-                        },
-                        child: const Text('Revoke Apple auth token'),
-                      ),
-                      TextFormField(
-                        controller: phoneController,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.phone),
-                          hintText: '+33612345678',
-                          labelText: 'Phone number',
-                        ),
-                      ),
 
                       const Divider(),
                       TextButton(
@@ -220,21 +174,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-              ),
-            ),
-            Positioned.directional(
-              textDirection: Directionality.of(context),
-              end: 40,
-              top: 40,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child:
-                    !showSaveButton
-                        ? SizedBox(key: UniqueKey())
-                        : TextButton(
-                          onPressed: isLoading ? null : updateDisplayName,
-                          child: const Text('Save changes'),
-                        ),
               ),
             ),
           ],

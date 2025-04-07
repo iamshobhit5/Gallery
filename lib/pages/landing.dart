@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'auth.dart';
-import 'profile.dart';
+import 'gallery.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     stream: FirebaseAuth.instance.authStateChanges(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return const ProfilePage();
+                        return const Gallery();
                       }
                       return const AuthGate();
                     },
