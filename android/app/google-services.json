@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "406641104689",
+    "project_id": "aqua-gallery",
+    "storage_bucket": "aqua-gallery.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406641104689:android:13f3e4021cc4572afd0210",
+        "android_client_info": {
+          "package_name": "com.example.gallery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCACfboUIFcHFWp4LjgSGLv6eMnhpihy44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
